@@ -64,7 +64,7 @@ public class ResourceWebView extends AbstractLinkedSonarWebView<ISonarResource> 
   protected void open(ISonarResource sonarResource) {
     SonarProject sonarProject = SonarProject.getInstance(sonarResource.getProject());
     String url = new SonarUrls().resourceUrl(sonarResource);
-    ISonarServer sonarServer = SonarCorePlugin.getServersManager().findServer(sonarProject.getUrl());
+    ISonarServer sonarServer = SonarCorePlugin.getServersManager().getServer(sonarProject.getUrl());
     if (sonarServer == null) {
       showMessage(NLS.bind(Messages.No_matching_server_in_configuration_for_project, sonarProject.getProject().getName(), url));
       return;

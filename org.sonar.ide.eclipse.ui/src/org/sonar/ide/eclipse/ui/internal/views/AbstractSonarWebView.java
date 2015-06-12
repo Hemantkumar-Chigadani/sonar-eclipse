@@ -61,7 +61,7 @@ public abstract class AbstractSonarWebView extends ViewPart {
   }
 
   protected void open(SonarProject sonarProject, String url) {
-    ISonarServer sonarServer = SonarCorePlugin.getServersManager().findServer(sonarProject.getUrl());
+    ISonarServer sonarServer = SonarCorePlugin.getServersManager().getServer(sonarProject.getUrl());
     if (sonarServer == null) {
       showMessage(NLS.bind(Messages.No_matching_server_in_configuration_for_project, sonarProject.getProject().getName(), url));
       return;

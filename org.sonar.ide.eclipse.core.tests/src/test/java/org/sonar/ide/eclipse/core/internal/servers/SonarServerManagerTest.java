@@ -45,7 +45,7 @@ public class SonarServerManagerTest {
   @Test
   public void shouldNotCreateFakeServer() throws Exception {
     String url = "http://new";
-    ISonarServer server = serversManager.findServer(url);
+    ISonarServer server = serversManager.getServer(url);
     assertThat(server, nullValue());
     assertThat(serversManager.getServers().size(), is(0));
   }
@@ -53,7 +53,7 @@ public class SonarServerManagerTest {
   @Test
   public void shouldUseSecureStorage() throws Exception {
     String url = "http://secure";
-    ISonarServer server = serversManager.create(url, "tester", "secret");
+    ISonarServer server = serversManager.create("sq", url, "tester", "secret");
     serversManager.addServer(server);
 
     ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault().node(ServersManager.PREF_SERVERS);

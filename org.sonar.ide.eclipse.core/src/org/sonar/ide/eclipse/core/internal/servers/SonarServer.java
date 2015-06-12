@@ -19,9 +19,11 @@
  */
 package org.sonar.ide.eclipse.core.internal.servers;
 
+import java.util.Properties;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.equinox.security.storage.EncodingUtils;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
@@ -29,29 +31,39 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.sonar.ide.eclipse.common.servers.ISonarServer;
 import org.sonar.ide.eclipse.core.internal.SonarCorePlugin;
+import org.sonar.ide.eclipse.core.internal.SonarProperties;
+import org.sonar.runner.api.EmbeddedRunner;
 
 public final class SonarServer implements ISonarServer {
 
-  private final String url;
-  private final boolean auth;
+  private final String id;
+  private String url;
+  private boolean auth;
   private String version;
+  private EmbeddedRunner runner;
 
-  public SonarServer(String url, String username, String password) {
-    this(url, StringUtils.isNotBlank(password) && StringUtils.isNotBlank(username));
+  public SonarServer(String id, String url, String username, String password) {
+    this(id, url, StringUtils.isNotBlank(password) && StringUtils.isNotBlank(username));
     if (auth) {
       setKeyForServerNode("username", username, false);
       setKeyForServerNode("password", password, true);
     }
   }
 
-  public SonarServer(String url) {
-    this(url, false);
+  public SonarServer(String id, String url) {
+    this(id, url, false);
   }
 
-  public SonarServer(String url, boolean auth) {
-    Assert.isNotNull(url);
+  public SonarServer(String id, String url, boolean auth) {
+    Assert.isNotNull(id);
+    this.id = id;
     this.url = url;
     this.auth = auth;
+  }
+
+  @Override
+  public String getId() {
+    return this.id;
   }
 
   @Override
@@ -122,6 +134,38 @@ public final class SonarServer implements ISonarServer {
       return getUrl().equals(sonarServer.getUrl());
     }
     return false;
+  }
+
+  @Override
+  public synchronized void startAnalysis(Properties props, boolean debugEnabled) {
+    if (runner == null) {
+      Properties globalProps = new Properties();
+      globalProps.setProperty(SonarProperties.SONAR_URL, getUrl());
+      if (StringUtils.isNotBlank(getUsername())) {
+        globalProps.setProperty(SonarProperties.SONAR_LOGIN, getUsername());
+        globalProps.setProperty(SonarProperties.SONAR_PASSWORD, getPassword());
+      }
+      globalProps.setProperty(SonarProperties.ANALYSIS_MODE, SonarProperties.ANALYSIS_MODE_PREVIEW);
+      globalProps.setProperty(SonarProperties.USE_HTTP_CACHE, "true");
+      if (debugEnabled) {
+        globalProps.setProperty(SonarProperties.VERBOSE_PROPERTY, "true");
+      }
+      globalProps.setProperty(SonarProperties.WORK_DIR, ResourcesPlugin.getWorkspace().getRoot().getLocation().append(".sonar").toString());
+      globalProps.setProperty("sonar.enableHttpCache", "true");
+      runner = EmbeddedRunner.create()
+        .setApp("Eclipse", SonarCorePlugin.getDefault().getBundle().getVersion().toString())
+        .addGlobalProperties(globalProps);
+      runner.start();
+    }
+    runner.runAnalysis(props);
+  }
+
+  public void stop() {
+    if (runner != null) {
+      runner.stop();
+      runner = null;
+    }
+
   }
 
 }

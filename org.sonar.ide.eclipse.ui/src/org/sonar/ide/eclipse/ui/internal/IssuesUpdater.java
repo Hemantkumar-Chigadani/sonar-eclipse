@@ -19,6 +19,8 @@
  */
 package org.sonar.ide.eclipse.ui.internal;
 
+import java.util.Collections;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -26,47 +28,66 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
-import org.sonar.ide.eclipse.core.internal.jobs.SynchronizeIssuesJob;
-
-import java.util.Collections;
+import org.sonar.ide.eclipse.core.internal.jobs.AnalyzeProjectRequest;
+import org.sonar.ide.eclipse.core.internal.jobs.SonarQubeAnalysisJob;
+import org.sonar.ide.eclipse.ui.internal.console.SonarConsole;
 
 public class IssuesUpdater implements IPartListener2 {
+  @Override
   public void partOpened(IWorkbenchPartReference partRef) {
     IWorkbenchPart part = partRef.getPart(true);
     if (part instanceof IEditorPart) {
       IEditorInput input = ((IEditorPart) part).getEditorInput();
       if (input instanceof IFileEditorInput) {
         IResource resource = ((IFileEditorInput) input).getFile();
-        new SynchronizeIssuesJob(Collections.singletonList(resource), false).schedule();
+        scheduleUpdate(resource);
       }
     }
   }
 
+  private void scheduleUpdate(IResource resource) {
+    boolean debugEnabled = SonarConsole.isDebugEnabled();
+    IProject project = resource.getProject();
+    AnalyzeProjectRequest request = new AnalyzeProjectRequest(resource)
+      .setDebugEnabled(debugEnabled)
+      .useHttpWsCache(false)
+      .setExtraProps(SonarUiPlugin.getExtraPropertiesForLocalAnalysis(project));
+    new SonarQubeAnalysisJob(Collections.singletonList(request)).schedule();
+  }
+
+  @Override
   public void partVisible(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
 
+  @Override
   public void partInputChanged(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
 
+  @Override
   public void partHidden(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
 
+  @Override
   public void partDeactivated(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
 
+  @Override
   public void partClosed(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
 
+  @Override
   public void partBroughtToTop(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
 
+  @Override
   public void partActivated(IWorkbenchPartReference partRef) {
     // Nothing to do
   }
+
 }

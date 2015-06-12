@@ -20,6 +20,8 @@
 package org.sonar.ide.eclipse.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -47,17 +49,21 @@ public class ServerLocationWizardPage extends WizardPage {
   private final ISonarServer sonarServer;
 
   private Text serverUrlText;
+  private Text serverIdText;
   private Text serverUsernameText;
   private Text serverPasswordText;
   private IStatus status;
+  private boolean edit;
 
   public ServerLocationWizardPage() {
     this(SonarCorePlugin.getServersManager().getDefault());
+    this.edit = false;
   }
 
   public ServerLocationWizardPage(ISonarServer sonarServer) {
     super("server_location_page", "SonarQube Server Configuration", SonarImages.SONARWIZBAN_IMG);
     this.sonarServer = sonarServer;
+    this.edit = true;
   }
 
   /**
@@ -78,6 +84,28 @@ public class ServerLocationWizardPage extends WizardPage {
     GridData gd = new GridData(GridData.FILL_HORIZONTAL);
     serverUrlText.setLayoutData(gd);
     serverUrlText.addModifyListener(new ModifyListener() {
+      @Override
+      public void modifyText(ModifyEvent e) {
+        if (!edit && StringUtils.isBlank(serverIdText.getText())) {
+          try {
+            URL url = new URL(serverUrlText.getText());
+            serverIdText.setText(url.getHost());
+          } catch (MalformedURLException e1) {
+            // Ignore
+          }
+        }
+        dialogChanged();
+      }
+    });
+
+    // Sonar Server ID
+    Label labelId = new Label(container, SWT.NULL);
+    labelId.setText(Messages.ServerLocationWizardPage_label_id);
+    serverIdText = new Text(container, SWT.BORDER | SWT.SINGLE);
+    gd = new GridData(GridData.FILL_HORIZONTAL);
+    serverIdText.setLayoutData(gd);
+    serverIdText.setEditable(!edit);
+    serverIdText.addModifyListener(new ModifyListener() {
       @Override
       public void modifyText(ModifyEvent e) {
         dialogChanged();
@@ -145,6 +173,7 @@ public class ServerLocationWizardPage extends WizardPage {
 
   private void initialize() {
     serverUrlText.setText(StringUtils.defaultString(sonarServer.getUrl()));
+    serverIdText.setText(StringUtils.defaultString(sonarServer.getId()));
     serverUsernameText.setText(StringUtils.defaultString(sonarServer.getUsername()));
     serverPasswordText.setText(StringUtils.defaultString(sonarServer.getPassword()));
   }
@@ -164,6 +193,10 @@ public class ServerLocationWizardPage extends WizardPage {
 
   public String getServerUrl() {
     return StringUtils.removeEnd(serverUrlText.getText(), "/");
+  }
+
+  public String getServerId() {
+    return serverIdText.getText();
   }
 
   public String getUsername() {

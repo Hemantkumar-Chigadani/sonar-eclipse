@@ -19,8 +19,10 @@
  */
 package org.sonar.ide.eclipse.ui.internal.views;
 
+import java.util.Collections;
 import org.apache.commons.lang.ObjectUtils;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
@@ -31,13 +33,13 @@ import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.sonar.ide.eclipse.core.internal.SonarCorePlugin;
-import org.sonar.ide.eclipse.core.internal.jobs.SynchronizeIssuesJob;
+import org.sonar.ide.eclipse.core.internal.jobs.AnalyzeProjectRequest;
+import org.sonar.ide.eclipse.core.internal.jobs.SonarQubeAnalysisJob;
 import org.sonar.ide.eclipse.core.internal.markers.MarkerUtils;
 import org.sonar.ide.eclipse.core.internal.resources.SonarProject;
 import org.sonar.ide.eclipse.ui.internal.SonarUiPlugin;
 import org.sonar.ide.eclipse.ui.internal.SonarUrls;
-
-import java.util.Collections;
+import org.sonar.ide.eclipse.ui.internal.console.SonarConsole;
 
 /**
  * Display details of an issue in a web browser
@@ -74,7 +76,13 @@ public class IssueEditorWebView extends AbstractLinkedSonarWebView<IMarker> {
 
     @Override
     public Object function(Object[] arguments) {
-      new SynchronizeIssuesJob(Collections.singletonList(resource), true).schedule();
+      boolean debugEnabled = SonarConsole.isDebugEnabled();
+      IProject project = resource.getProject();
+      AnalyzeProjectRequest request = new AnalyzeProjectRequest(resource)
+        .setDebugEnabled(debugEnabled)
+        .useHttpWsCache(false)
+        .setExtraProps(SonarUiPlugin.getExtraPropertiesForLocalAnalysis(project));
+      new SonarQubeAnalysisJob(Collections.singletonList(request)).schedule();
       return null;
     }
 

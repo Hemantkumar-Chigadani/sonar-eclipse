@@ -19,7 +19,11 @@
  */
 package org.sonar.ide.eclipse.common.servers;
 
+import java.util.Properties;
+
 public interface ISonarServer {
+
+  String getId();
 
   String getUrl();
 
@@ -30,5 +34,7 @@ public interface ISonarServer {
   String getPassword();
 
   String getVersion();
+
+  void startAnalysis(Properties props, boolean debugEnabled);
 
 }

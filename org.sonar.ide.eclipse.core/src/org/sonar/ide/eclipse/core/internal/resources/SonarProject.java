@@ -19,25 +19,18 @@
  */
 package org.sonar.ide.eclipse.core.internal.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.CheckForNull;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.sonar.ide.eclipse.core.internal.SonarCorePlugin;
 
-import javax.annotation.CheckForNull;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-/**
- * @author Evgeny Mandrikov
- */
 public class SonarProject implements ISonarProject {
 
   private final IProject project;
   private String url;
   private String key;
-  private Date lastAnalysisDate;
   private List<SonarProperty> extraProperties = new ArrayList<SonarProperty>();
 
   public SonarProject(IProject project) {
@@ -60,6 +53,7 @@ public class SonarProject implements ISonarProject {
     SonarCorePlugin.getDefault().getProjectManager().saveSonarConfiguration(project, this);
   }
 
+  @Override
   public String getUrl() {
     return url;
   }
@@ -68,14 +62,17 @@ public class SonarProject implements ISonarProject {
     this.url = url;
   }
 
+  @Override
   public IProject getProject() {
     return project;
   }
 
+  @Override
   public IResource getResource() {
     return project;
   }
 
+  @Override
   public String getKey() {
     return key;
   }
@@ -84,18 +81,12 @@ public class SonarProject implements ISonarProject {
     this.key = key;
   }
 
+  @Override
   public String getName() {
     return project.getName();
   }
 
-  public Date getLastAnalysisDate() {
-    return lastAnalysisDate == null ? null : new Date(lastAnalysisDate.getTime());
-  }
-
-  public void setLastAnalysisDate(Date lastAnalysisDate) {
-    this.lastAnalysisDate = lastAnalysisDate == null ? null : new Date(lastAnalysisDate.getTime());
-  }
-
+  @Override
   public List<SonarProperty> getExtraProperties() {
     return extraProperties;
   }

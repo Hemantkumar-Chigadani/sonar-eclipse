@@ -40,6 +40,7 @@ public final class Messages extends NLS {
   public static String IssuesView_action_refresh_tooltip;
 
   public static String ServerLocationWizardPage_label_host;
+  public static String ServerLocationWizardPage_label_id;
   public static String ServerLocationWizardPage_label_username;
   public static String ServerLocationWizardPage_label_password;
   public static String ServerLocationWizardPage_action_test;
@@ -52,7 +53,6 @@ public final class Messages extends NLS {
   public static String SonarProjectPropertyBlock_label_host;
   public static String SonarProjectPropertyBlock_label_key;
   public static String SonarProjectPropertyBlock_label_language;
-  public static String SonarProjectPropertyBlock_label_analysis_date;
 
   public static String SonarServerPreferencePage_title;
   public static String SonarServerPreferencePage_description;
@@ -69,8 +69,6 @@ public final class Messages extends NLS {
   public static String SonarPreferencePage_label_new_issues_marker_severity;
   public static String SonarPreferencePage_label_extra_args;
   public static String SonarProjectPropertyBlock_label_override_workspace_settings;
-  public static String SonarPreferencePage_label_jvm_args;
-  public static String SonarPreferencePage_label_force_full_preview;
 
   public static String SonarConsoleRemoveAction_tooltip;
 

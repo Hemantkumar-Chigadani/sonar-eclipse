@@ -31,8 +31,6 @@ import org.eclipse.ui.dialogs.PropertyPage;
 import org.sonar.ide.eclipse.core.internal.resources.SonarProject;
 import org.sonar.ide.eclipse.ui.internal.Messages;
 
-import java.text.SimpleDateFormat;
-
 /**
  * Property page for projects to view sonar server connection. It store in
  * <project>/.settings/org.sonar.ide.eclipse.prefs following properties:
@@ -42,8 +40,6 @@ import java.text.SimpleDateFormat;
  * @author Jérémie Lagarde
  */
 public class SonarProjectPropertyPage extends PropertyPage {
-
-  private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
   public SonarProjectPropertyPage() {
     setTitle(Messages.SonarProjectPropertyPage_title);
@@ -70,9 +66,6 @@ public class SonarProjectPropertyPage extends PropertyPage {
 
     addText(Messages.SonarProjectPropertyBlock_label_host, sonarProject.getUrl(), container);
     addText(Messages.SonarProjectPropertyBlock_label_key, sonarProject.getKey(), container);
-    if (sonarProject.getLastAnalysisDate() != null) {
-      addText(Messages.SonarProjectPropertyBlock_label_analysis_date, sdf.format(sonarProject.getLastAnalysisDate()), container);
-    }
 
     return container;
   }

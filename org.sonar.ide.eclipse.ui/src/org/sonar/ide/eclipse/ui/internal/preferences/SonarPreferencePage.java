@@ -20,10 +20,8 @@
 package org.sonar.ide.eclipse.ui.internal.preferences;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.sonar.ide.eclipse.ui.internal.Messages;
@@ -38,6 +36,7 @@ public class SonarPreferencePage extends FieldEditorPreferencePage implements IW
     super(Messages.SonarPreferencePage_title, GRID);
   }
 
+  @Override
   public void init(IWorkbench workbench) {
     setDescription(Messages.SonarPreferencePage_description);
     setPreferenceStore(SonarUiPlugin.getDefault().getPreferenceStore());
@@ -60,10 +59,6 @@ public class SonarPreferencePage extends FieldEditorPreferencePage implements IW
         {"Warning", String.valueOf(IMarker.SEVERITY_WARNING)},
         {"Error", String.valueOf(IMarker.SEVERITY_ERROR)}},
       getFieldEditorParent()));
-    addField(new StringFieldEditor(SonarUiPlugin.PREF_JVM_ARGS,
-      Messages.SonarPreferencePage_label_jvm_args, getFieldEditorParent()));
-    addField(new BooleanFieldEditor(SonarUiPlugin.PREF_FORCE_FULL_PREVIEW,
-      Messages.SonarPreferencePage_label_force_full_preview, BooleanFieldEditor.SEPARATE_LABEL, getFieldEditorParent()));
   }
 
 }
