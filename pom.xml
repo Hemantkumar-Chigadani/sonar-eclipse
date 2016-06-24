@@ -1,46 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-<parent> 
-    <groupId>org.sonarsource.parent</groupId> 
-    <artifactId>parent</artifactId> 
-    <version>23</version>
-    <relativePath/>
+  <parent>
+    <groupId>org.sonarsource.parent</groupId>
+    <artifactId>parent</artifactId>
+    <version>32</version>
+    <relativePath />
   </parent>
 
-  <groupId>org.sonarsource.sonar-eclipse</groupId>
-  <artifactId>eclipse-parent</artifactId>
+  <groupId>org.sonarsource.sonarlint.eclipse</groupId>
+  <artifactId>sonarlint-eclipse-parent</artifactId>
   <packaging>pom</packaging>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>2.2.0-SNAPSHOT</version>
 
-  <name>SonarQube Integration for Eclipse (parent)</name>
+  <name>SonarLint for Eclipse (parent)</name>
   <description></description>
-  <url>http://redirect.sonarsource.com/doc/sonar-eclipse.html</url>
-  <inceptionYear>2010</inceptionYear>
+  <url>http://eclipse.sonarlint.org</url>
+  <inceptionYear>2015</inceptionYear>
   <organization>
     <name>SonarSource</name>
     <url>http://www.sonarsource.com</url>
   </organization>
 
   <developers>
-    <developer>
-      <id>godin</id>
-      <name>Evgeny Mandrikov</name>
-      <timezone>+3</timezone>
-      <roles>
-        <role>Project Leader</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jer</id>
-      <name>Jérémie Lagarde</name>
-      <timezone>+1</timezone>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
     <developer>
       <id>henryju</id>
       <name>Julien Henry</name>
@@ -49,14 +33,6 @@
         <role>Developer</role>
       </roles>
     </developer>
-    <developer>
-      <id>kalidasya</id>
-      <name>Tamas Kende</name>
-      <timezone>+1</timezone>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>	
   </developers>
 
   <prerequisites>
@@ -64,37 +40,22 @@
   </prerequisites>
 
   <modules>
-    <module>org.sonar.ide.eclipse.wsclient</module>
-    <module>org.sonar.ide.eclipse.common</module>
+    <module>org.sonarlint.eclipse.core</module>
+    <module>org.sonarlint.eclipse.ui</module>
+    <module>org.sonarlint.eclipse.feature</module>
 
-    <module>org.sonar.ide.eclipse.core</module>
-    <module>org.sonar.ide.eclipse.ui</module>
-    <module>org.sonar.ide.eclipse.feature</module>
+    <module>org.sonarlint.eclipse.jdt</module>
+    <module>org.sonarlint.eclipse.jdt.feature</module>
 
-    <module>org.sonar.ide.eclipse.jdt</module>
-    <module>org.sonar.ide.eclipse.jdt.feature</module>
-
-    <module>org.sonar.ide.eclipse.cdt</module>
-    <module>org.sonar.ide.eclipse.cdt.feature</module>
-
-    <module>org.sonar.ide.eclipse.pydev</module>
-    <module>org.sonar.ide.eclipse.pydev.feature</module>
-
-    <module>org.sonar.ide.eclipse.erlide</module>
-    <module>org.sonar.ide.eclipse.erlide.feature</module>
-	
-    <module>org.sonar.ide.eclipse.m2e</module>
-    <module>org.sonar.ide.eclipse.m2e.feature</module>
-
-    <module>org.sonar.ide.eclipse.site</module>
+    <module>org.sonarlint.eclipse.site</module>
 
     <module>target-platform-e42</module>
     <module>target-platform-e43</module>
     <module>target-platform-e44</module>
     <module>target-platform-e45</module>
+    <module>target-platform-e46</module>
 
-    <module>org.sonar.ide.eclipse.tests.common</module>
-    <module>org.sonar.ide.eclipse.core.tests</module>
+    <module>org.sonarlint.eclipse.core.tests</module>
   </modules>
 
   <scm>
@@ -105,37 +66,21 @@
 
   <issueManagement>
     <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/SONARIDE/component/14315</url>
+    <url>https://jira.sonarsource.com/browse/SLE</url>
   </issueManagement>
   <ciManagement>
-    <system>Bamboo</system>
-    <url>http://bamboo.ci.codehaus.org/browse/SONARIDE-ECLIPSE</url>
+    <system>Travis</system>
+    <url>https://travis-ci.org/SonarSource/sonar-eclipse</url>
   </ciManagement>
-  <distributionManagement>
-    <repository>
-      <id>sonar-ide</id>
-      <name>SonarQube Eclipse repository</name>
-      <url>${sonar-ide.releases}</url>
-    </repository>
-    <snapshotRepository>
-      <id>sonar-ide</id>
-      <name>SonarQube Eclipse snapshot repository</name>
-      <url>${sonar-ide.snapshots}</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
-  </distributionManagement>
 
   <properties>
-    <license.title>SonarQube Eclipse</license.title>
-    <license.year>2010-2015</license.year>
+    <license.title>SonarLint for Eclipse</license.title>
+    <license.year>2015</license.year>
+    <license.mailto>sonarlint@sonarsource.com</license.mailto>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <tycho.version>0.23.0</tycho.version>
-    <target.platform>e44</target.platform>
-
-    <!-- disable accidental deployment -->
-    <sonar-ide.site>dav:http://localhost</sonar-ide.site>
-    <sonar-ide.snapshots>http://localhost</sonar-ide.snapshots>
-    <sonar-ide.releases>http://localhost</sonar-ide.releases>
+    <tycho.version>0.25.0</tycho.version>
+    <tycho-extras-version>${tycho.version}</tycho-extras-version>
+    <target.platform>e45</target.platform>
 
     <!-- ================== -->
     <!-- For SonarQube analysis -->
@@ -143,50 +88,21 @@
     <sonar.java.source>1.7</sonar.java.source>
     <sonar.java.target>1.7</sonar.java.target>
     <sonar.scm.ignoreLocalModifications>true</sonar.scm.ignoreLocalModifications>
-    <sonar.skippedModules>org.sonar.ide.eclipse.tests.common,org.sonar.ide.eclipse.core.tests,org.sonar.ide.eclipse.mylyn.tests</sonar.skippedModules>
+    <sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
+    <jarsigner.skip>true</jarsigner.skip>
   </properties>
 
   <!-- These dependencies will be added to the target platform -->
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-ws-client</artifactId>
-      <version>4.5.1</version>
+      <groupId>org.sonarsource.sonarlint.core</groupId>
+      <artifactId>sonarlint-core</artifactId>
+      <version>2.3.2</version>
     </dependency>
     <dependency>
-      <groupId>org.sonarsource.sonar-runner</groupId>
-      <artifactId>sonar-runner-api</artifactId>
-      <version>2.5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.7</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>18.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient-osgi</artifactId>
-      <version>4.3.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore-osgi</artifactId>
-      <version>4.3.2</version>
+      <groupId>org.sonarsource.sonarlint.core</groupId>
+      <artifactId>sonarlint-client-api</artifactId>
+      <version>2.3.2</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -197,11 +113,6 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>2.0.1</version>
     </dependency>
   </dependencies>
 
@@ -262,31 +173,6 @@
           <artifactId>tycho-p2-repository-plugin</artifactId>
           <version>${tycho.version}</version>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>com.mycila.maven-license-plugin</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <versionRange>[1.9.0,)</versionRange>
-                    <goals>
-                      <goal>check</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -325,70 +211,99 @@
             </artifact>
           </target>
           <environments>
-                <environment>
-                  <os>linux</os>
-                  <ws>gtk</ws>
-                  <arch>x86_64</arch>
-                </environment>
-                <environment>
-                  <os>linux</os>
-                  <ws>gtk</ws>
-                  <arch>x86</arch>
-                </environment>
-                <environment>
-                  <os>win32</os>
-                  <ws>win32</ws>
-                  <arch>x86</arch>
-                </environment>
-                <environment>
-                  <os>win32</os>
-                  <ws>win32</ws>
-                  <arch>x86_64</arch>
-                </environment>
-                <environment>
-                  <os>macosx</os>
-                  <ws>cocoa</ws>
-                  <arch>x86_64</arch>
-                </environment>
-              </environments>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment>
+          </environments>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jarsigner-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>sign</id>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <alias>sonarsource-codesign-2015-2017</alias>
+          <keystore>${sonarsource.keystore.path}</keystore>
+          <storepass>${sonarsource.keystore.password}</storepass>
+          <skip>${jarsigner.skip}</skip>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-p2-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>p2-metadata</id>
+            <goals>
+              <goal>p2-metadata</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <defaultP2Metadata>false</defaultP2Metadata>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
   <profiles>
-    <!-- This profile is used to gather code coverage for SonarQube -->
     <profile>
-      <id>jacoco</id>
-      <properties>
-        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
-      </properties>
-
+      <id>coverage</id>
       <build>
         <plugins>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.7.5.201505241946</version>
+            <configuration>
+              <append>true</append>
+              <destFile>${sonar.jacoco.reportPath}</destFile>
+            </configuration>
             <executions>
               <execution>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
-                <configuration>
-                  <append>true</append>
-                  <destFile>${sonar.jacoco.reportPath}</destFile>
-                </configuration>
               </execution>
             </executions>
           </plugin>
         </plugins>
       </build>
     </profile>
-
-    <!-- TODO This profile is used to sign artifacts -->
+    <!-- This profile is used to sign artifacts -->
     <profile>
       <id>sign</id>
       <activation>
@@ -396,22 +311,9 @@
           <name>jarsigner.alias</name>
         </property>
       </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jarsigner-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign</id>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
+      <properties>
+        <jarsigner.skip>false</jarsigner.skip>
+      </properties>
     </profile>
   </profiles>
 </project>

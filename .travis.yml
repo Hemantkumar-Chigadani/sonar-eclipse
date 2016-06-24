@@ -6,29 +6,30 @@ env:
   global:
     - DISPLAY=:99.0
   matrix:
-    - TARGET_PLATFORM=e42 RUN_ITS=false
-    - TARGET_PLATFORM=e43 RUN_ITS=false
-    - TARGET_PLATFORM=e44 RUN_ITS=true SQ_VERSION=LTS
-    - TARGET_PLATFORM=e45 RUN_ITS=true SQ_VERSION=DEV
+    - TARGET=CI
+    - TARGET=IT TARGET_PLATFORM=e42
+    - TARGET=IT TARGET_PLATFORM=e43
+    - TARGET=IT TARGET_PLATFORM=e44
+    - TARGET=IT TARGET_PLATFORM=e45
+#    - TARGET=IT TARGET_PLATFORM=e46
 
 jdk:
-  - oraclejdk7
-
-addons:
-  apt:
-    packages:
-    - metacity # metacity is required by swtbot
+  - oraclejdk8
 
 script:
   - ./travis.sh
 
-after_failure:
- - cat /home/travis/build/SonarSource/sonar-eclipse/integrationTests/org.sonar.ide.eclipse.ui.its/target/work/data/.metadata/.log
- - cat /home/travis/build/SonarSource/sonar-eclipse/integrationTests/org.sonar.ide.eclipse.ui.its/target/surefire-reports/*
-
 cache:
   directories:
-    - '$HOME/.m2/repository'
+    - $HOME/.m2/repository
+    - $HOME/.sonar
 
 notifications:
   email: false
+
+addons:
+  apt:
+    packages:
+      # upgrade java 8 as the default version 1.8.0_31 prevents from compiling sources
+      # https://github.com/travis-ci/travis-ci/issues/4042
+      - oracle-java8-installer

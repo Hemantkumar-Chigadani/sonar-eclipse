@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="projectConfigurators" name="Project Configurators" schema="schema/projectConfigurators.exsd"/>
+
+
+   <extension
+        id="sonarlintProblem"
+        name="SonarLint Issue"
+        point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+      <attribute
+            name="rulename">
+      </attribute>
+      <attribute
+            name="rulekey">
+      </attribute>
+      <attribute
+            name="creationdate">
+      </attribute>
+      <attribute
+            name="checksum">
+      </attribute>
+   </extension>
+
+  <extension id="sonarlintBuilder" name="SonarLint Builder" point="org.eclipse.core.resources.builders">
+      <builder hasNature="false">
+         <run class="org.sonarlint.eclipse.core.internal.builder.SonarLintBuilder">
+         </run>
+      </builder>
+   </extension>
+
+  <extension
+        point="org.eclipse.core.expressions.propertyTesters">
+     <propertyTester
+           class="org.sonarlint.eclipse.core.internal.resources.SonarLintPropertyTester"
+           id="org.sonarlint.eclipse.core.internal.resources.BindedPropertyTester"
+           namespace="org.sonarlint.eclipse.core"
+           properties="isBound,isAutoAnalysis"
+           type="org.eclipse.core.runtime.IAdaptable">
+     </propertyTester>
+  </extension>
+</plugin>
